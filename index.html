@@ -17,133 +17,115 @@
   .hover-bg-navy:hover { background-color: #003366; }
 </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 flex min-h-screen">
 
-<div class="flex min-h-screen">
-  <!-- Sidebar -->
-  <nav class="w-64 bg-white shadow-md border-r border-gray-200 flex flex-col">
-    <div class="px-6 py-4 border-b border-gray-200 text-xl font-semibold text-blue-700">ASET DIKBUD</div>
+<!-- Sidebar -->
+<nav class="w-64 bg-white shadow-md border-r border-gray-200 flex flex-col">
+  <div class="px-6 py-4 border-b border-gray-200 text-xl font-semibold text-blue-700">ASET DIKBUD</div>
 
-    <!-- Menu Master Data -->
-    <div class="group border-b border-gray-200">
-      <a href="#" class="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 block">Master Data</a>
-    </div>
-
-    <!-- Menu KIB Dropdown -->
-    <div class="group border-b border-gray-200">
-      <button id="kibBtn" class="w-full flex justify-between items-center px-6 py-3 hover:bg-blue-100 focus:outline-none">
-        <span class="font-medium text-gray-700">KIB</span>
-        <svg id="kibArrow" class="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-      <div id="kibDropdown" class="hidden flex flex-col bg-gray-50 border-t border-gray-200">
-        <a href="inputdata.html" class="px-10 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 kib-link">Input KIB B</a>
-        <a href="#" class="px-10 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 kib-link">Input KIB C</a>
-      </div>
-    </div>
-
-    <!-- Menu Kecamatan Dropdown -->
-    <div class="group border-b border-gray-200">
-      <button id="kecamatanBtn" class="w-full flex justify-between items-center px-6 py-3 hover:bg-blue-100 focus:outline-none">
-        <span class="font-medium text-gray-700">Kecamatan</span>
-        <svg id="kecamatanArrow" class="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-      <ul id="kecamatanDropdown" class="hidden flex-col border-t border-gray-200 bg-gray-50">
-        <li data-kecamatan="Banawa" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Banawa</li>
-        <li data-kecamatan="Banawa Tengah" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Banawa Tengah</li>
-        <li data-kecamatan="Banawa Selatan" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Banawa Selatan</li>
-        <li data-kecamatan="Rio Pakava" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Rio Pakava</li>
-        <li data-kecamatan="Pinembani" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Pinembani</li>
-        <li data-kecamatan="Tanantovea" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Tanantovea</li>
-        <li data-kecamatan="Labuan" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Labuan</li>
-        <li data-kecamatan="Sindue" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sindue</li>
-        <li data-kecamatan="Sindue Tombusabora" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sindue Tombusabora</li>
-        <li data-kecamatan="Sindue Tobata" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sindue Tobata</li>
-        <li data-kecamatan="Sirenja" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sirenja</li>
-        <li data-kecamatan="Balaesang" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Balaesang</li>
-        <li data-kecamatan="Balaesang Tanjung" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Balaesang Tanjung</li>
-        <li data-kecamatan="Dampelas" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Dampelas</li>
-        <li data-kecamatan="Sojol" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sojol</li>
-        <li data-kecamatan="Sojol Utara" class="px-10 py-2 hover:text-blue-600 hover:bg-blue-50">Kecamatan Sojol Utara</li>
-      </ul>
-    </div>
-
-    <!-- Menu Rekapan Kabupaten -->
-    <div class="group border-b border-gray-200">
-      <a href="#" class="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 block">Rekapan Kabupaten</a>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="flex-1 p-6">
-    <h2 class="text-center text-3xl font-bold mb-4 navy">Gabungan Data Peralatan Mesin</h2>
-
-    <div class="mb-2 text-gray-700 font-medium" id="dataCount">Loading data...</div>
-
-    <div class="mb-4 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
-      <div>
-        <button id="downloadExcel" class="bg-navy hover-bg-navy text-white px-4 py-2 rounded shadow-md mr-2">Download Excel</button>
-        <button id="downloadPdf" class="bg-navy hover-bg-navy text-white px-4 py-2 rounded shadow-md">Download PDF</button>
-      </div>
-      <div>
-        <input type="text" id="searchInput" placeholder="Cari..." class="border rounded px-4 py-2 w-full md:w-80">
-      </div>
-    </div>
-
-    <div class="overflow-x-auto bg-white rounded shadow-md">
-      <table id="dataTable" class="min-w-full table-auto border border-gray-300">
-        <thead>
-          <tr class="bg-navy text-white">
-            <th class="border px-4 py-2">Urut</th>
-            <th class="border px-4 py-2">Pengguna Barang</th>
-            <th class="border px-4 py-2">Kode Barang</th>
-            <th class="border px-4 py-2">Nama Barang</th>
-            <th class="border px-4 py-2">Konfirmasi Keberadaan</th>
-            <th class="border px-4 py-2">Kondisi</th>
-            <th class="border px-4 py-2">Label BMD</th>
-            <th class="border px-4 py-2">Penggunaan</th>
-            <th class="border px-4 py-2">Nama Pengguna</th>
-            <th class="border px-4 py-2">Status Pegawai Pengguna</th>
-            <th class="border px-4 py-2">Keterangan Tambahan</th>
-            <th class="border px-4 py-2">NIBAR</th>
-            <th class="border px-4 py-2">Merek/Tipe</th>
-            <th class="border px-4 py-2">Nomor Polisi</th>
-            <th class="border px-4 py-2">Nomor Rangka</th>
-            <th class="border px-4 py-2">Nomor BPKB</th>
-            <th class="border px-4 py-2">Nilai Perolehan</th>
-            <th class="border px-4 py-2">Cara Perolehan</th>
-            <th class="border px-4 py-2">Perolehan</th>
-            <th class="border px-4 py-2">Status Penggunaan</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-700">
-          <tr><td colspan="20" class="text-center py-8">Loading data...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div id="pagination" class="flex justify-center mt-6 space-x-2"></div>
+  <!-- Menu Master Data -->
+  <div class="group border-b border-gray-200">
+    <a href="#" data-sheet="Master Data" class="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 block">Master Data</a>
   </div>
+
+  <!-- Menu KIB Dropdown -->
+  <div class="group border-b border-gray-200">
+    <button id="kibBtn" class="w-full flex justify-between items-center px-6 py-3 hover:bg-blue-100 focus:outline-none">
+      <span class="font-medium text-gray-700">KIB</span>
+      <svg id="kibArrow" class="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+    <div id="kibDropdown" class="hidden flex flex-col bg-gray-50 border-t border-gray-200">
+      <a href="inputdata.html" class="px-10 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 kib-link">Input KIB B</a>
+      <a href="#" class="px-10 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 kib-link">Input KIB C</a>
+    </div>
+  </div>
+
+  <!-- Menu Kecamatan Dropdown -->
+  <div class="group border-b border-gray-200">
+    <button id="kecamatanBtn" class="w-full flex justify-between items-center px-6 py-3 hover:bg-blue-100 focus:outline-none">
+      <span class="font-medium text-gray-700">Kecamatan</span>
+      <svg id="kecamatanArrow" class="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+    <ul id="kecamatanDropdown" class="hidden flex-col border-t border-gray-200 bg-gray-50">
+      <li data-kecamatan="Banawa" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Banawa</li>
+      <li data-kecamatan="Banawa Tengah" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Banawa Tengah</li>
+      <li data-kecamatan="Banawa Selatan" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Banawa Selatan</li>
+      <li data-kecamatan="Rio Pakava" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Rio Pakava</li>
+      <li data-kecamatan="Pinembani" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Pinembani</li>
+      <li data-kecamatan="Tanantovea" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Tanantovea</li>
+      <li data-kecamatan="Labuan" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Labuan</li>
+      <li data-kecamatan="Sindue" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sindue</li>
+      <li data-kecamatan="Sindue Tombusabora" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sindue Tombusabora</li>
+      <li data-kecamatan="Sindue Tobata" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sindue Tobata</li>
+      <li data-kecamatan="Sirenja" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sirenja</li>
+      <li data-kecamatan="Balaesang" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Balaesang</li>
+      <li data-kecamatan="Balaesang Tanjung" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Balaesang Tanjung</li>
+      <li data-kecamatan="Dampelas" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Dampelas</li>
+      <li data-kecamatan="Sojol" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sojol</li>
+      <li data-kecamatan="Sojol Utara" class="px-10 py-2 hover:bg-blue-50 cursor-pointer">Kecamatan Sojol Utara</li>
+    </ul>
+  </div>
+
+  <!-- Menu Rekapan Kabupaten -->
+  <div class="group border-b border-gray-200">
+    <a href="#" id="rekapanKabupaten" class="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 block">Rekapan Kabupaten</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="flex-1 p-6">
+  <h2 class="text-center text-3xl font-bold mb-4 navy">Gabungan Data Peralatan Mesin</h2>
+
+  <div class="mb-2 text-gray-700 font-medium" id="dataCount">Loading data...</div>
+
+  <div class="mb-4 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
+    <div>
+      <button id="downloadExcel" class="bg-navy hover-bg-navy text-white px-4 py-2 rounded shadow-md mr-2">Download Excel</button>
+      <button id="downloadPdf" class="bg-navy hover-bg-navy text-white px-4 py-2 rounded shadow-md">Download PDF</button>
+    </div>
+    <div>
+      <input type="text" id="searchInput" placeholder="Cari..." class="border rounded px-4 py-2 w-full md:w-80">
+    </div>
+  </div>
+
+  <div class="overflow-x-auto bg-white rounded shadow-md">
+    <table id="dataTable" class="min-w-full table-auto border border-gray-300">
+      <thead>
+        <tr class="bg-navy text-white">
+          <th class="border px-4 py-2">Urut</th>
+          <th class="border px-4 py-2">Pengguna Barang</th>
+          <th class="border px-4 py-2">Kode Barang</th>
+          <th class="border px-4 py-2">Nama Barang</th>
+          <th class="border px-4 py-2">Konfirmasi Keberadaan</th>
+          <th class="border px-4 py-2">Kondisi</th>
+          <th class="border px-4 py-2">Label BMD</th>
+          <th class="border px-4 py-2">Penggunaan</th>
+          <th class="border px-4 py-2">Nama Pengguna</th>
+          <th class="border px-4 py-2">Status Pegawai Pengguna</th>
+          <th class="border px-4 py-2">Keterangan Tambahan</th>
+          <th class="border px-4 py-2">NIBAR</th>
+          <th class="border px-4 py-2">Merek/Tipe</th>
+          <th class="border px-4 py-2">Nomor Polisi</th>
+          <th class="border px-4 py-2">Nomor Rangka</th>
+          <th class="border px-4 py-2">Nomor BPKB</th>
+          <th class="border px-4 py-2">Nilai Perolehan</th>
+          <th class="border px-4 py-2">Cara Perolehan</th>
+          <th class="border px-4 py-2">Perolehan</th>
+          <th class="border px-4 py-2">Status Penggunaan</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr><td colspan="20" class="text-center py-8">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="pagination" class="flex justify-center mt-6 space-x-2"></div>
 </div>
-
-<script>
-// Sidebar Dropdown
-document.getElementById('kibBtn').addEventListener('click', ()=>{
-  const dropdown = document.getElementById('kibDropdown');
-  const arrow = document.getElementById('kibArrow');
-  dropdown.classList.toggle('hidden');
-  arrow.classList.toggle('rotate-90');
-});
-
-document.getElementById('kecamatanBtn').addEventListener('click', ()=>{
-  const dropdown = document.getElementById('kecamatanDropdown');
-  const arrow = document.getElementById('kecamatanArrow');
-  dropdown.classList.toggle('hidden');
-  arrow.classList.toggle('rotate-90');
-});
 
 <script>
 // Array CSV publik dari semua sheet
@@ -188,7 +170,7 @@ async function loadAllData() {
         "Label BMD": row["Label BMD\n(selain Kendaraan)"] || '',
         "Penggunaan": row["Penggunaan"] || '',
         "Nama Pengguna": row["Nama Pengguna\n(Jika Penggunaan : Digunakan Pegawai)"] || '',
-        "Status Pegawai Pengguna": row["Status Pegawai Pengguna\n(Jika Penggunaan : Digunakan Pegawai)"] || '',
+        "Status Pegawai Pengguna": row["Status Pegawai Pengguna\n(Jika Digunakan Pegawai)"] || '',
         "Keterangan Tambahan": row["Keterangan Tambahan"] || '',
         "NIBAR": row["NIBAR"] || '',
         "Merek/Tipe": row["Merek/tipe"] || '',
@@ -254,12 +236,14 @@ function renderPagination() {
 
 function goToPage(page){ currentPage=page; renderTable(); }
 
+// Search
 document.getElementById('searchInput').addEventListener('input', function(){
   const query = this.value.toLowerCase();
   filteredData = currentData.filter(row => Object.values(row).some(v=>(v||'').toLowerCase().includes(query)));
   currentPage=1; renderTable();
 });
 
+// Download Excel
 document.getElementById('downloadExcel').addEventListener('click', ()=> {
   if(!currentData.length){ alert('Data belum dimuat.'); return;}
   const worksheet = XLSX.utils.json_to_sheet(currentData);
@@ -268,6 +252,7 @@ document.getElementById('downloadExcel').addEventListener('click', ()=> {
   XLSX.writeFile(workbook, 'Gabungan_Peralatan_Mesin.xlsx');
 });
 
+// Download PDF
 document.getElementById('downloadPdf').addEventListener('click', ()=> {
   if(!currentData.length){ alert('Data belum dimuat.'); return;}
   const { jsPDF } = window.jspdf;
@@ -278,11 +263,39 @@ document.getElementById('downloadPdf').addEventListener('click', ()=> {
   doc.save('Gabungan_Peralatan_Mesin.pdf');
 });
 
-loadAllData();
-// auto refresh 30 detik
-setInterval(loadAllData, 30000);
-</script>
+// Filter Kecamatan
+document.querySelectorAll('#kecamatanDropdown li').forEach(li => {
+  li.addEventListener('click', ()=>{
+    const kec = li.getAttribute('data-kecamatan');
+    filteredData = currentData.filter(row => (row["Penggunaan"]||'').toLowerCase().includes(kec.toLowerCase()));
+    currentPage = 1;
+    renderTable();
+  });
+});
 
+// Rekapan Kabupaten (tampilkan semua)
+document.getElementById('rekapanKabupaten').addEventListener('click', ()=>{
+  filteredData = currentData;
+  currentPage = 1;
+  renderTable();
+});
+
+loadAllData();
+setInterval(loadAllData, 30000);
+
+// Sidebar dropdown toggle
+document.getElementById('kibBtn').addEventListener('click', ()=>{
+  const dd = document.getElementById('kibDropdown');
+  const arrow = document.getElementById('kibArrow');
+  dd.classList.toggle('hidden');
+  arrow.classList.toggle('rotate-90');
+});
+document.getElementById('kecamatanBtn').addEventListener('click', ()=>{
+  const dd = document.getElementById('kecamatanDropdown');
+  const arrow = document.getElementById('kecamatanArrow');
+  dd.classList.toggle('hidden');
+  arrow.classList.toggle('rotate-90');
+});
+</script>
 </body>
 </html>
-
