@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Peralatan Mesin - Realtime Interaktif</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+
+<h1 class="text-2xl font-bold mb-4">Daftar Peralatan Mesin (Realtime)</h1>
+
+<!-- Search, Filter & Download -->
+<div class="flex flex-col md:flex-row gap-2 mb-4 items-center">
+  <input id="search" type="text" placeholder="Cari..." class="flex-1 px-3 py-2 rounded border shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+  <select id="filter" class="px-3 py-2 rounded border shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    <option value="all">Semua</option>
+    <option value="available">Tersedia</option>
+    <option value="missing">Kosong</option>
+  </select>
+  <button id="downloadBtn" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Download Excel</button>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="min-w-full border border-gray-200" id="table">
+    <thead class="bg-gray-100 sticky top-0"><tr></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const SHEET_ID = "1Ql_xKix5CFAedhZRTu_kw_7gnKKZYevY";
+const SHEET_NAME = "B.Peralatan Mesin";
+const URL = `https://opensheet.elk.sh/${SHEET_ID}/${encodeURIComponent(SHEET_NAME)}`;
+
+let allData = [];
+let filteredData = [];
+
+// Load data dari sheet
+async function loadData() {
+  try {
+    const res = await fetch(URL);
+    allData = await res.json();
+    applyFilters();
+  } catch(err) {
+    console.error("Error fetch data:", err);
+  }
+}
+
+// Render tabel dengan header dinamis
+function renderTable(data) {
+  filteredData = data;
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+
+  if(data.length === 0) return;
+
+  // Header dinamis
+  const theadTr = document.querySelector("thead tr");
+  theadTr.innerHTML = "";
+  Object.keys(data[0]).forEach(key => {
+    const th = document.createElement("th");
+    th.textContent = key;
+    th.classList.add("border", "px-2", "py-1");
+    theadTr.appendChild(th);
+  });
+
+  // Body
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.classList.add("hover:bg-gray-100");
+    Object.values(row).forEach(val => {
+      const td = document.createElement("td");
+      td.textContent = val || "-";
+      td.classList.add("border","px-2","py-1");
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+// Filter & Search
+const searchInput = document.getElementById("search");
+const filterSelect = document.getElementById("filter");
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase();
+  const mode = filterSelect.value;
+  const filtered = allData.filter(row => {
+    const match = Object.values(row).some(v => (v||"").toLowerCase().includes(query));
+    if(mode === "available") return match && Object.values(row).some(v=>v);
+    if(mode === "missing") return match && Object.values(row).every(v=>!v);
+    return match;
+  });
+  renderTable(filtered);
+}
+
+searchInput.addEventListener("input", applyFilters);
+filterSelect.addEventListener("change", applyFilters);
+
+// Download CSV / Excel
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  if(filteredData.length === 0) return alert("Tidak ada data untuk diunduh!");
+  const headers = Object.keys(filteredData[0]);
+  const csv = [
+    headers.join(","),
+    ...filteredData.map(row => headers.map(h => `"${(row[h]||"").replace(/"/g,'""')}"`).join(","))
+  ].join("\n");
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Peralatan_Mesin.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// Load pertama & auto refresh setiap 30 detik
+loadData();
+setInterval(loadData, 30000);
+</script>
+
+</body>
+</html>
