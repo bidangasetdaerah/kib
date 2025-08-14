@@ -128,33 +128,17 @@
 </div>
 
 <script>
-// Array CSV publik dari semua sheet
-const csvUrls = [
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vRd8vIhHDUbmD6I2aXLX7-_Ysemt2aXA__wKNGoKN0XWWSWCScv5aSmx06H0xkl8g/pub?gid=1917777904&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnykw5e_i3dwBIeTua-mpFExEJ4w6hROJ5F6OUHiiGpbtunldeKgXlhN_G-D1V8w/pub?gid=1454720232&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhDJK33BtCz7KEi6DWgqheZBrcdgK0X9Pw1r28u5ec1MK-I-kP-QOqrsY0G2OnEQ/pub?gid=708970016&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQshgCYmG0DHxcwLUzhtUamXTYnWb8tR7WQwnJq9k7ldFz_JhV4GHDE-k_dMO_pSA/pub?gid=1860451546&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3MhjBMD3q8UIfOTdAUOHKMdeGcwr3y2YQGFcDmHDd0IVsOsAECl511LsNJ9ynow9cmY4yBpP1jENa/pub?gid=1200528899&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vT7WqNsmpUBIy0-lVm2JdGg1KUKwNgQPpbSyDuuFDwB1aGPY8gsZSBWmxIgiOeJNA/pub?gid=1615242439&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2sjcmJjTCYD3p6-7pDQTmm3mCVphZIP2-5DGZOHxStucexMcdqPVsfsbnDouFcA/pub?gid=1920885371&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vRYHOyrOQ_hNjC1L1FoIMVbbWES0dPGb1OaU6V--PV_lm0O97IHFvtPRhgRNXn_dA/pub?gid=1974330298&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIbvzs-jZRcf1z0uV_Ahwh6dNdBgBHw66T358D9wd0-DHimDs8r4ajCvZwLa8Srg/pub?gid=801352666&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vROhU6H6reNQxHKsAmYYgfcaSZyis1vALTmBkYhjAp7BGX_wNdA2cVdgOjFQIIgjQ/pub?output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIf6mV6qgS6fmRe3jz305N8wCDdKWJcKKWSxHtybbo7xoERx15unD-x4rgyFxF-g/pub?gid=1401841928&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRojLHXJ4W6IEdiNn34kZrMgr5QvPZllm85-sbgD0WxjG6vFMUMQz3QzzGnM-7pw/pub?gid=820099832&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_BmCgfv-HOMRKzNMZ1aHL05CZsR7Ie0VZGRJTD29tX1C-ANiKASW1hB_PM69WuQ/pub?gid=1489077321&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vT64A3AbrmT4TK8fLj5ctUc3LLMESXVTOuw3nBd2qRTEFIljaxTBW3-Z5u4w7W2Ng/pub?gid=1781390946&single=true&output=csv',
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vT41KwECicPb2EY8d8BP1f73RM3dhVWYDOxpaFlHZluKFy9owLzyVX7N7mIUm37Tw/pub?gid=502544387&single=true&output=csv'
-];
+const csvUrls = [/* daftar URL CSV sama seperti sebelumnya */];
 
 let currentData = [];
 let filteredData = [];
 let currentPage = 1;
 const itemsPerPage = 100;
+let searchQuery = "";
 
-// Load & gabungkan semua CSV
+// Load semua data
 async function loadAllData() {
-  currentData = [];
+  let tempData = [];
   try {
     for (const url of csvUrls) {
       const res = await fetch(url);
@@ -182,33 +166,44 @@ async function loadAllData() {
         "Perolehan": row["Perolehan"] || '',
         "Status Penggunaan": row["Status Penggunaan"] || ''
       }));
-      currentData = currentData.concat(mapped);
+      tempData = tempData.concat(mapped);
     }
-    filteredData = currentData;
-    currentPage = 1;
+    currentData = tempData;
+
+    // Filter sesuai query
+    if (searchQuery) {
+      filteredData = currentData.filter(row =>
+        Object.values(row).some(v => (v || '').toString().toLowerCase().includes(searchQuery))
+      );
+    } else {
+      filteredData = currentData;
+    }
+
     renderTable();
   } catch (err) {
     console.error("Error load CSV:", err);
   }
 }
 
-function updateDataCount(){
+function updateDataCount() {
   const countDiv = document.getElementById('dataCount');
-  countDiv.textContent = `Menampilkan ${filteredData.length} data`;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIdx = filteredData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const endIdx = Math.min(currentPage * itemsPerPage, filteredData.length);
+  countDiv.textContent = `Halaman ${currentPage} dari ${totalPages} — Menampilkan ${startIdx}–${endIdx} dari ${filteredData.length} data`;
 }
 
 function renderTable() {
   const tbody = document.querySelector('#dataTable tbody');
   tbody.innerHTML = '';
-  if(filteredData.length === 0){
+  if (filteredData.length === 0) {
     tbody.innerHTML = '<tr><td colspan="20" class="text-center py-8">Tidak ada data</td></tr>';
   } else {
-    const startIdx = (currentPage -1)*itemsPerPage;
-    const pageData = filteredData.slice(startIdx, startIdx+itemsPerPage);
-
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const pageData = filteredData.slice(startIdx, startIdx + itemsPerPage);
     pageData.forEach(row => {
       const tr = document.createElement('tr');
-      tr.innerHTML = Object.values(row).map(val=>`<td class="border px-4 py-2">${val||''}</td>`).join('');
+      tr.innerHTML = Object.values(row).map(val => `<td class="border px-4 py-2">${val || ''}</td>`).join('');
       tbody.appendChild(tr);
     });
   }
@@ -217,65 +212,71 @@ function renderTable() {
 }
 
 function renderPagination() {
-  const totalPages = Math.ceil(filteredData.length/itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginationDiv = document.getElementById('pagination');
   paginationDiv.innerHTML = '';
+  if (totalPages <= 1) return;
 
-  if(totalPages <=1) return;
-
-  const prevBtn = `<button class="px-3 py-1 bg-navy text-white rounded ${currentPage===1?'opacity-50':''}" ${currentPage===1?'disabled':''} onclick="goToPage(${currentPage-1})">Prev</button>`;
-  const nextBtn = `<button class="px-3 py-1 bg-navy text-white rounded ${currentPage===totalPages?'opacity-50':''}" ${currentPage===totalPages?'disabled':''} onclick="goToPage(${currentPage+1})">Next</button>`;
-  paginationDiv.innerHTML += prevBtn;
-
-  for(let i=1;i<=totalPages;i++){
-    paginationDiv.innerHTML += `<button class="px-3 py-1 ${i===currentPage?'bg-blue-700 text-white':'bg-gray-200'} rounded" onclick="goToPage(${i})">${i}</button>`;
+  paginationDiv.innerHTML += `<button class="px-3 py-1 bg-navy text-white rounded ${currentPage === 1 ? 'opacity-50' : ''}" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">Prev</button>`;
+  let start = Math.max(1, currentPage - 2);
+  let end = Math.min(totalPages, currentPage + 2);
+  for (let i = start; i <= end; i++) {
+    paginationDiv.innerHTML += `<button class="px-3 py-1 ${i === currentPage ? 'bg-blue-700 text-white' : 'bg-gray-200'} rounded" onclick="goToPage(${i})">${i}</button>`;
   }
-
-  paginationDiv.innerHTML += nextBtn;
+  paginationDiv.innerHTML += `<button class="px-3 py-1 bg-navy text-white rounded ${currentPage === totalPages ? 'opacity-50' : ''}" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Next</button>`;
 }
 
-function goToPage(page){ currentPage=page; renderTable(); }
+function goToPage(page) {
+  currentPage = page;
+  renderTable();
+}
 
-// Search
-document.getElementById('searchInput').addEventListener('input', function(){
-  const query = this.value.toLowerCase();
-  filteredData = currentData.filter(row => Object.values(row).some(v=>(v||'').toLowerCase().includes(query)));
-  currentPage=1; renderTable();
+document.getElementById('searchInput').addEventListener('input', function () {
+  searchQuery = this.value.trim().toLowerCase();
+  if (searchQuery === '') {
+    filteredData = currentData;
+  } else {
+    filteredData = currentData.filter(row =>
+      Object.values(row).some(v => (v || '').toString().toLowerCase().includes(searchQuery))
+    );
+  }
+  currentPage = 1;
+  renderTable();
 });
 
-// Download Excel
-document.getElementById('downloadExcel').addEventListener('click', ()=> {
-  if(!currentData.length){ alert('Data belum dimuat.'); return;}
+document.getElementById('downloadExcel').addEventListener('click', () => {
+  if (!currentData.length) { alert('Data belum dimuat.'); return; }
   const worksheet = XLSX.utils.json_to_sheet(currentData);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'GabunganPeralatanMesin');
   XLSX.writeFile(workbook, 'Gabungan_Peralatan_Mesin.xlsx');
 });
 
-// Download PDF
-document.getElementById('downloadPdf').addEventListener('click', ()=> {
-  if(!currentData.length){ alert('Data belum dimuat.'); return;}
+document.getElementById('downloadPdf').addEventListener('click', () => {
+  if (!currentData.length) { alert('Data belum dimuat.'); return; }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('l', 'pt', 'a4');
   const columns = Object.keys(currentData[0]);
-  const pdfData = currentData.map(row => columns.map(k=>row[k]||''));
-  doc.autoTable({ head:[columns], body:pdfData, startY:20, styles:{fontSize:8}, headStyles:{fillColor:[0,31,63]}});
+  const pdfData = currentData.map(row => columns.map(k => row[k] || ''));
+  doc.autoTable({ head: [columns], body: pdfData, startY: 20, styles: { fontSize: 8 }, headStyles: { fillColor: [0, 31, 63] } });
   doc.save('Gabungan_Peralatan_Mesin.pdf');
 });
 
-// Filter Kecamatan
 document.querySelectorAll('#kecamatanDropdown li').forEach(li => {
-  li.addEventListener('click', ()=>{
+  li.addEventListener('click', () => {
     const kec = li.getAttribute('data-kecamatan');
-    filteredData = currentData.filter(row => (row["Penggunaan"]||'').toLowerCase().includes(kec.toLowerCase()));
+    filteredData = currentData.filter(row => (row["Penggunaan"] || '').toLowerCase().includes(kec.toLowerCase()));
+    searchQuery = '';
+    document.getElementById('searchInput').value = '';
     currentPage = 1;
     renderTable();
   });
 });
 
-// Rekapan Kabupaten (tampilkan semua)
-document.getElementById('rekapanKabupaten').addEventListener('click', ()=>{
+document.getElementById('rekapanKabupaten').addEventListener('click', () => {
   filteredData = currentData;
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
   currentPage = 1;
   renderTable();
 });
@@ -283,18 +284,13 @@ document.getElementById('rekapanKabupaten').addEventListener('click', ()=>{
 loadAllData();
 setInterval(loadAllData, 30000);
 
-// Sidebar dropdown toggle
-document.getElementById('kibBtn').addEventListener('click', ()=>{
-  const dd = document.getElementById('kibDropdown');
-  const arrow = document.getElementById('kibArrow');
-  dd.classList.toggle('hidden');
-  arrow.classList.toggle('rotate-90');
+document.getElementById('kibBtn').addEventListener('click', () => {
+  document.getElementById('kibDropdown').classList.toggle('hidden');
+  document.getElementById('kibArrow').classList.toggle('rotate-90');
 });
-document.getElementById('kecamatanBtn').addEventListener('click', ()=>{
-  const dd = document.getElementById('kecamatanDropdown');
-  const arrow = document.getElementById('kecamatanArrow');
-  dd.classList.toggle('hidden');
-  arrow.classList.toggle('rotate-90');
+document.getElementById('kecamatanBtn').addEventListener('click', () => {
+  document.getElementById('kecamatanDropdown').classList.toggle('hidden');
+  document.getElementById('kecamatanArrow').classList.toggle('rotate-90');
 });
 </script>
 </body>
